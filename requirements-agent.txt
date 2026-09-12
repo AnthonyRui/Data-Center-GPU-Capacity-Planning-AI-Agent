@@ -1,0 +1,5 @@
+# Phase 1B runtime, including the original model / Phase 1B 运行环境，包含原模型
+-r requirements.txt
+openai>=3.13,<4
+python-dotenv>=1.2,<2
+jsonschema>=4.26,<5

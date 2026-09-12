@@ -1,0 +1,5 @@
+# Tested direct dependencies / 已测试的直接依赖
+-r requirements-lock.txt
+openai==3.13.0
+python-dotenv==1.2.3
+jsonschema==4.26.0

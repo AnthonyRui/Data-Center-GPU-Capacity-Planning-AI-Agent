@@ -1,0 +1,4 @@
+﻿scenario,rack_it_power_kw,pod_it_power_mw,pue,pod_facility_power_mw,max_pods,source
+Conservative,44.1,1.06,1.25,1.32,377,Scenario benchmark / 场景基准值
+Baseline,58.7,1.88,1.20,2.25,221,Scenario benchmark / 场景基准值
+High-Density,73.5,2.35,1.15,2.70,184,Scenario benchmark / 场景基准值

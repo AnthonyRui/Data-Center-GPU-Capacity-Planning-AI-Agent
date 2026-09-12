@@ -1,0 +1,7 @@
+{
+  "pue": {"start": 1.10, "stop": 1.60, "step": 0.01},
+  "servers_per_rack": [1, 2, 3, 4, 5, 6],
+  "racks_per_pod": [8, 16, 24, 32, 40, 48, 56, 64],
+  "notes_en": "One input varies at a time around Baseline. Network power per rack and all other inputs stay fixed. Density values are mathematical cases, not verified physical rack layouts.",
+  "notes_zh": "围绕Baseline每次只改变一个输入，机架网络功率及其他参数保持不变。密度值仅为数学场景，不代表已验证的物理机架布局。"
+}
