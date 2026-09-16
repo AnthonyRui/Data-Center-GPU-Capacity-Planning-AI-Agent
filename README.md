@@ -4,9 +4,100 @@
 
 Convert server specifications and deployment assumptions into rack power, pod power, facility demand and whole-pod GPU capacity. Explore how PUE, rack density and pod size change the result.
 
-**Agent extension status: Phase 1B.** A natural-language CLI now connects to the deterministic tools through an OpenAI/OpenRouter adapter. Configure your own API key and model for live use, or try a clearly labeled offline demo. Phase 1B live acceptance passed for baseline, follow-up, comparison, sensitivity, plotting and scope handling. See [acceptance evidence](docs/phase1b_acceptance.md); free-model availability can vary. See [CLI setup](docs/agent_cli.md).
+**Agent extension status: Phase 2A + 2B.** The CLI combines four deterministic engineering tools with local, sourced knowledge retrieval. OpenRouter free models and OpenAI remain supported. Read the [Phase 2 guide](docs/phase2_knowledge.md) and [validation record](docs/phase2_validation.md). The [Phase 1B acceptance record](docs/phase1b_acceptance.md) preserves the earlier milestone.
 
-**Agent 扩展进度：Phase 1B。** 已增加通过 OpenAI/OpenRouter 适配器调用确定性工具的自然语言 CLI。真实使用需配置你自己的 API Key 和模型，也可先运行明确标注的离线演示。Phase 1B 基准、追问、比较、敏感性、绘图及范围说明的真实对话验收已通过。见[验收记录](docs/phase1b_acceptance.md)，免费模型可用性仍可能波动。详见[CLI 配置说明](docs/agent_cli.md)。
+**Agent 扩展进度：Phase 2A + 2B。** CLI 已将四个确定性工程工具与带来源的本地知识检索结合，继续支持 OpenRouter 免费模型及 OpenAI。详见[Phase 2 使用指南](docs/phase2_knowledge.md)及[验证记录](docs/phase2_validation.md)。[Phase 1B 验收记录](docs/phase1b_acceptance.md)保留先前阶段证据。
+
+## Development Roadmap / 开发路线图
+
+Current status: **Phase 2A + 2B complete**. Phase 1A (four validated engineering tools), Phase 1B (CLI agent, OpenRouter support and live acceptance), and Phase 2A/2B (local sourced knowledge retrieval and conversational integration) are complete. The next planned delivery is Phase 3, beginning with engineering constraints. The roadmap is intentionally staged so each phase is tested and reviewed before the next one starts.
+
+当前状态：**Phase 2A + 2B 已完成**。Phase 1A（四个经过验证的工程工具）、Phase 1B（CLI Agent、OpenRouter 接入及真实验收）以及 Phase 2A/2B（带来源的本地知识检索和对话接入）均已完成。下一阶段计划从工程约束开始，进入 Phase 3。路线图按阶段推进，每个阶段先测试和验收，再进入下一阶段。
+
+| Phase | Status / 状态 | Scope / 范围 |
+| --- | --- | --- |
+| Phase 1A | Complete / 已完成 | Four deterministic Agent Tools, validation and regression tests / 四个确定性 Agent Tool、校验与回归测试 |
+| Phase 1B | Complete / 已完成 | CLI conversation, OpenRouter free routing, plots and live acceptance / CLI 对话、OpenRouter 免费路由、绘图与真实验收 |
+| Phase 2A | Complete / 已完成 | Curated bilingual local knowledge corpus and lexical retrieval / 双语本地知识库与词项检索 |
+| Phase 2B | Complete / 已完成 | Knowledge tool calling, source panels and mixed calculation flows / 知识工具调用、来源面板与混合计算流程 |
+| Phase 3 | Planned / 计划中 | Engineering constraints and reserve-aware capacity planning / 工程约束与考虑预留的容量规划 |
+| Phase 4 | Planned / 计划中 | Streamlit Dashboard and 500 MW case study / Streamlit Dashboard 与 500 MW 案例 |
+| Phase 5 | Planned / 计划中 | Cooling, UPS, transformer and redundancy constraints / 冷却、UPS、变压器与冗余约束 |
+| Phase 6 | Planned / 计划中 | Workload forecasting and real-world PUE data / 工作负载预测与真实 PUE 数据 |
+| Phase 7 | Planned / 计划中 | Expanded document-grounded Agent, E2E tests and documentation / 文档增强 Agent、E2E 测试与文档 |
+| Phase 8 | Planned / 计划中 | Validated v1.0 release / 经过验收的 v1.0 发布 |
+
+### Phase 3 — Engineering constraints and capacity planning / 工程约束与容量规划
+
+- [ ] Operating Reserve and Growth Reserve calculations, input validation and boundary tests.
+- [ ] Partial Pod Allocation and Whole Pod versus Partial Pod comparison.
+- [ ] Physical Rack Constraint and joint Power Limit plus Rack Space Limit feasibility checks.
+- [ ] Unit tests for every new capacity constraint and clearer bottleneck explanations.
+- [ ] Reserve percentage versus GPU capacity, Whole Pod versus Partial Pod, and Rack Density versus Constraint charts.
+- [ ] GitHub Release **v0.2 — Engineering Constraints**.
+
+- [ ] Operating Reserve 与 Growth Reserve 计算、输入校验和边界测试。
+- [ ] Partial Pod Allocation，以及 Whole Pod 与 Partial Pod 方案对比。
+- [ ] Physical Rack Constraint，以及 Power Limit 与 Rack Space Limit 联合约束判断。
+- [ ] 为所有新增容量约束增加单元测试，并优化瓶颈原因解释。
+- [ ] 增加 Reserve% 与 GPU Capacity、Whole Pod 与 Partial Pod、Rack Density 与 Constraint 图表。
+- [ ] 发布 GitHub Release **v0.2 — Engineering Constraints**。
+
+### Phase 4 — Dashboard and case study / Dashboard 与案例研究
+
+- [ ] Create a basic Streamlit Dashboard with Facility MW, PUE, Reserve, Servers/Rack and Racks/Pod inputs.
+- [ ] Display Pods, Racks, GPUs, Remaining Power, Scenario Comparison and PUE Sensitivity.
+- [ ] Add the new capacity-planning charts, natural-language Capacity Planning input and current AI Agent integration.
+- [ ] Add Web UI validation and user-friendly error messages.
+- [ ] Build a complete 500 MW Data Center Case Study with charts and result interpretation.
+- [ ] Update README with Dashboard screenshot, architecture diagram, Demo instructions, Quick Start and installation instructions.
+
+- [ ] 创建基础 Streamlit Dashboard，加入 Facility MW、PUE、Reserve、Servers/Rack、Racks/Pod 输入。
+- [ ] 展示 Pods、Racks、GPUs、Remaining Power、Scenario Comparison 和 PUE Sensitivity。
+- [ ] 加入新增容量规划图表、自然语言 Capacity Planning 输入，并接入现有 AI Agent。
+- [ ] 增加 Web UI 输入校验和错误提示。
+- [ ] 完成 500 MW Data Center Case Study，并配套图表和结果解释。
+- [ ] 更新 README，加入 Dashboard 截图、架构图、Demo、Quick Start 和安装说明。
+
+### Phase 5 — Facility equipment and redundancy constraints / 设备与冗余约束
+
+- [ ] Cooling Capacity, UPS Capacity and Transformer Capacity constraints.
+- [ ] N+1 / 2N redundancy model and joint Power, Cooling and Rack Space bottleneck analysis.
+- [ ] Real equipment parameter configuration files and GPU Server / Rack / Pod Profile management.
+
+- [ ] Cooling Capacity、UPS Capacity 与 Transformer Capacity 约束。
+- [ ] N+1 / 2N 冗余模型，以及 Power、Cooling、Rack Space 多约束联合瓶颈判断。
+- [ ] 真实设备参数配置文件，以及 GPU Server / Rack / Pod Profile 管理。
+
+### Phase 6 — Forecasting and live data / 预测与实时数据
+
+- [ ] Time-Series Workload simulation and Capacity Forecast under different load levels.
+- [ ] Real-world PUE data interface or data import.
+
+- [ ] Time-Series Workload 模拟，以及不同负载水平下的 Capacity Forecast。
+- [ ] Real-world PUE 数据接口或数据导入。
+
+### Phase 7 — Document-grounded engineering Agent / 文档增强工程 Agent
+
+- [ ] Expand RAG to read approved data-center technical documents.
+- [ ] Let the Agent answer engineering parameter and design-constraint questions with local source citations.
+- [ ] Add complete End-to-End tests, GitHub Actions automated testing, Demo data and example scenarios.
+- [ ] Add complete Architecture Documentation, Limitations and Engineering Assumptions documentation.
+
+- [ ] 扩展 RAG，读取经过许可的数据中心技术文档。
+- [ ] 让 Agent 根据文档回答工程参数和设计约束问题，并附本地来源引用。
+- [ ] 增加完整 End-to-End 测试、GitHub Actions 自动测试、Demo 数据和示例场景。
+- [ ] 增加完整 Architecture Documentation、Limitations 和 Engineering Assumptions 文档。
+
+### Phase 8 — Release / 发布
+
+- [ ] Publish the complete **v1.0** release after all preceding phases are independently validated.
+
+- [ ] 在前述阶段分别验收通过后发布完整 **v1.0**。
+
+The roadmap records planned work; unchecked items are not implemented or promised in the current release. Detailed electrical design and other unsupported engineering decisions remain outside the model until their constraints and sources are explicitly implemented and tested.
+
+路线图记录计划工作；未勾选项目尚未在当前版本实现，也不代表已承诺交付。详细电气设计及其他不支持的工程决策，必须在明确实现约束与来源并完成测试后才会纳入模型。
 
 ![Scenario comparison](figures/readme_en/scenario_comparison.png)
 
@@ -234,3 +325,17 @@ Read the [CLI guide](docs/agent_cli.md), [tool contracts](docs/agent_tools.md), 
 Upload **the contents of this repository folder**, so this README appears at the GitHub repository root. Include `data`, `results`, `figures`, notebooks and hidden configuration files. Exclude local virtual environments and temporary files. This project has not been pushed to a remote repository automatically.
 
 上传**本项目文件夹内的内容**，使 README 位于 GitHub 仓库根目录。包含 `agent`、`examples`、`src`、测试、数据、原有结果、图表、Notebook 及隐藏配置文件；不上传虚拟环境、`generated`、日志或真实 `.env`。本项目未自动推送到远程仓库。
+
+## Local knowledge / 本地知识问答
+
+Search the curated bilingual knowledge base without an API key:
+
+无需 API Key 检索整理好的中英文知识库：
+
+```powershell
+.\.venv\Scripts\python.exe run_agent.py --search-knowledge "What is PUE?"
+```
+
+In a live conversation, ask for a sourced explanation or combine it with a capacity calculation. Retrieved specification summaries and calculated deployment results are shown separately. The local corpus is not a current web lookup. See [Phase 2 instructions](docs/phase2_knowledge.md).
+
+真实对话可以询问带来源的解释，也可同时要求容量计算。检索规格摘要和部署计算结果分别展示；本地知识库不代表实时网络查询。详见[Phase 2 使用说明](docs/phase2_knowledge.md)。

@@ -1,4 +1,4 @@
-"""Interactive capacity agent, Phase 1B. / Phase 1B 交互式容量 Agent。"""
+"""Interactive capacity and knowledge agent, Phase 2. / Phase 2 容量与知识交互 Agent。"""
 
 import argparse
 import getpass
@@ -53,6 +53,10 @@ def main(argv=None):
     )
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument(
+        "--search-knowledge",
+        help="Search local knowledge without an API key / 无需 Key 检索本地知识",
+    )
+    modes.add_argument(
         "--question", help="One natural-language question / 单次自然语言问题"
     )
     modes.add_argument(
@@ -88,6 +92,28 @@ def main(argv=None):
 
         if args.configure:
             return configure()
+        if args.search_knowledge is not None:
+            from agent.agent import TurnResult
+            from agent.knowledge import search_knowledge
+
+            try:
+                result = search_knowledge(args.search_knowledge)
+            except ValueError as exc:
+                print(str(exc), file=sys.stderr)
+                return 2
+            print(
+                json.dumps(result, ensure_ascii=False, indent=2)
+                if args.json
+                else format_turn(
+                    TurnResult(
+                        "Local retrieval only; no API call.",
+                        "仅执行本地检索，未调用 API。",
+                        [result],
+                        status="knowledge",
+                    )
+                )
+            )
+            return 0
         if args.demo:
             from agent.demo import QUESTIONS, DemoClient
 
@@ -152,7 +178,7 @@ def main(argv=None):
                 continue
             if question == "/help":
                 print(
-                    "Ask for capacity, scenario comparison or PUE sensitivity.\n可询问容量、场景比较或 PUE 敏感性。\n/reset clears conversation; /baseline on permits documented defaults; /exit quits.\n/reset 清空会话；/baseline on 允许文档默认值；/exit 退出。"
+                    "Ask for capacity, scenarios, PUE sensitivity or sourced project knowledge.\n可询问容量、场景比较、PUE 敏感性及带来源的项目知识。\n/reset clears conversation; /baseline on permits documented defaults; /exit quits.\n/reset 清空会话；/baseline on 允许文档默认值；/exit 退出。"
                 )
                 continue
             print("Working... / 正在计算与组织回答…")

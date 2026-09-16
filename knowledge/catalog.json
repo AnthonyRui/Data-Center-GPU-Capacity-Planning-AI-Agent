@@ -1,0 +1,115 @@
+[
+  {
+    "id": "pue",
+    "title_en": "PUE and facility overhead",
+    "title_zh": "PUE 与设施开销",
+    "text_en": "PUE relates total facility power to IT power in this planning model. Facility power equals IT power multiplied by PUE. With a fixed facility budget, lower PUE leaves more power for IT. PUE is held constant in a scenario; real facilities vary with load and operating conditions. This is not GPU compute utilization.",
+    "text_zh": "本规划模型用 PUE 表示设施总功率与 IT 功率的比值；设施功率等于 IT 功率乘以 PUE。设施预算固定时，较低 PUE 留给 IT 的功率更多。场景中 PUE 固定，实际设施会随负载及运行条件变化。PUE 不是 GPU 计算利用率。",
+    "keywords": [
+      "pue",
+      "efficiency",
+      "能效",
+      "电能使用效率"
+    ],
+    "source_file": "README.md",
+    "source_section": "Engineering problem and motivation; Model architecture and methodology",
+    "source_kind": "project_model",
+    "source_url": null
+  },
+  {
+    "id": "hardware",
+    "title_en": "DGX B200 specification provenance",
+    "title_zh": "DGX B200 规格来源",
+    "text_en": "The project documents NVIDIA DGX B200 as eight GPUs per server, maximum whole-system power of 14.3 kW and a 10U chassis. These are documented public specifications, not measured consumption for every workload. Whole-system power already includes internal components; the model adds external rack networking separately. Check the original NVIDIA source before applying specifications to a different system.",
+    "text_zh": "项目记录 DGX B200 每台服务器有 8 张 GPU、整机最大功率 14.3 kW、机身 10U。这些是公开规格，不是所有负载下的实测功耗。整机功率已包括内部部件；模型另计机架外部网络功率。其他服务器不能直接沿用这些规格。",
+    "keywords": [
+      "b200",
+      "dgx",
+      "specification",
+      "hardware",
+      "规格",
+      "服务器"
+    ],
+    "source_file": "docs/model_assumptions.md",
+    "source_section": "Parameter basis; Physical and operating interpretation",
+    "source_kind": "public_specification",
+    "source_url": "https://docs.nvidia.com/dgx/dgxb200-user-guide/introduction-to-dgxb200.html"
+  },
+  {
+    "id": "layout",
+    "title_en": "Rack and pod capacity",
+    "title_zh": "机架与 Pod 容量",
+    "text_en": "Servers and external networking contribute to rack IT power. A pod groups racks. The model deploys whole pods, so pod and GPU counts change in steps as PUE changes. Power feasibility does not establish physical rack fit; chassis height, networking, weight, cooling and service clearance need separate checks. Use calculation tools for deployment counts.",
+    "text_zh": "服务器与外部网络共同构成机架 IT 功率，多个机架组成 Pod。模型只部署完整 Pod，因此 PUE 变化时 Pod 和 GPU 数呈阶梯变化。功率可行不代表物理安装可行；高度、网络设备、重量、冷却及维护空间需另行核验。部署数量必须调用计算工具。",
+    "keywords": [
+      "rack",
+      "pod",
+      "机架",
+      "阶梯",
+      "安装"
+    ],
+    "source_file": "docs/model_assumptions.md",
+    "source_section": "Physical and operating interpretation",
+    "source_kind": "project_model",
+    "source_url": null
+  },
+  {
+    "id": "assumptions",
+    "title_en": "Baseline assumptions and scenario sources",
+    "title_zh": "基准假设与场景来源",
+    "text_en": "Facility capacity, servers per rack, external network power, racks per pod and PUE are planning assumptions. They are not NVIDIA server specifications. Editable inputs live in data/scenario_parameters.csv. Conservative and High-Density configurations are reconstructed illustrative scenarios, not measured deployments or uniquely inferred configurations. Defaults require explicit baseline context.",
+    "text_zh": "设施容量、每机架服务器数、外部网络功率、每 Pod 机架数及 PUE 是规划假设，不是 NVIDIA 服务器规格。可编辑输入位于 data/scenario_parameters.csv。保守与高密度配置是重建的示例场景，不是实测部署，也不是唯一推导出的配置。默认值需要明确的基准上下文。",
+    "keywords": [
+      "assumption",
+      "baseline",
+      "defaults",
+      "假设",
+      "默认",
+      "参数来源"
+    ],
+    "source_file": "docs/model_assumptions.md",
+    "source_section": "Parameter basis; Reconstruction",
+    "source_kind": "scenario_assumption",
+    "source_url": null
+  },
+  {
+    "id": "reserve",
+    "title_en": "Remaining power and utilization",
+    "title_zh": "剩余功率与容量利用率",
+    "text_en": "Remaining capacity is unused facility power caused by fitting an integer number of complete pods. It is not an intentional safety or reliability reserve. High facility power utilization is a mathematical packing outcome, not a recommended operating target. Other IT services and reserve margins are not allocated in the current model.",
+    "text_zh": "剩余容量是完整 Pod 整数装填后未使用的设施功率，不是有意设置的安全或可靠性预留。高设施功率利用率是数学装填结果，不是推荐运行目标。当前模型未为其他 IT 业务或预留余量分配预算。",
+    "keywords": [
+      "reserve",
+      "remaining",
+      "utilization",
+      "余量",
+      "预留",
+      "剩余"
+    ],
+    "source_file": "docs/model_assumptions.md",
+    "source_section": "Physical and operating interpretation",
+    "source_kind": "project_limitation",
+    "source_url": null
+  },
+  {
+    "id": "scope",
+    "title_en": "Cooling context and unsupported design",
+    "title_zh": "冷却背景与不支持的设计",
+    "text_en": "PUE represents aggregate facility overhead in the power model; it does not size cooling equipment or certify thermal feasibility. Breaker, transformer, cable and UPS selection, electrical construction design, physical-fit certification and energy or cost estimation are outside the current tools. Missing design details cannot be supplied by retrieving general background material.",
+    "text_zh": "PUE 在功率模型中体现综合设施开销，不用于冷却设备选型或热可行性认证。断路器、变压器、电缆和 UPS 选型、电气施工设计、物理安装认证及能耗费用估算均超出当前工具范围。检索通用背景资料不能补足详细设计依据。",
+    "keywords": [
+      "scope",
+      "cooling",
+      "breaker",
+      "transformer",
+      "冷却",
+      "选型",
+      "变压器",
+      "断路器"
+    ],
+    "source_file": "docs/agent_cli.md",
+    "source_section": "Conversation; Scope",
+    "source_kind": "project_limitation",
+    "source_url": null
+  }
+]

@@ -91,7 +91,7 @@ class AgentLoopTests(unittest.TestCase):
 
     def test_all_definitions_strict_and_plot_takes_only_result_id(self):
         definitions = tool_definitions()
-        self.assertEqual(len(definitions), 4)
+        self.assertEqual(len(definitions), 5)
 
         def check(schema):
             if schema.get("type") == "object":

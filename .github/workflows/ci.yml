@@ -14,3 +14,4 @@ jobs:
       - run: python run_analysis.py --output-dir generated
       - run: python scripts/verify_notebooks.py
       - run: python run_agent.py --demo baseline
+      - run: python run_agent.py --search-knowledge "What is PUE?" --json

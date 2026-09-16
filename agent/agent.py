@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from jsonschema import Draft202012Validator
 
+from .knowledge import search_knowledge
 from .llm_client import ModelClient, ProviderError, strict_json
 from .prompts import system_prompt
 from .schemas import ToolValidationError
@@ -81,6 +82,13 @@ class CapacityAgent:
                 return _error(
                     "invalid_parameters", "Invalid tool arguments / 工具参数格式无效"
                 )
+            if name == "search_knowledge":
+                data = search_knowledge(**args)
+                if self._contains_secret(json.dumps(data, ensure_ascii=False)):
+                    return _error(
+                        "invalid_source", "Knowledge source rejected / 知识来源被拒绝"
+                    )
+                return {"ok": True, "data": data}
             if name == "generate_capacity_plot":
                 stored = self.results.get(args["result_id"])
                 kinds = {
@@ -224,10 +232,12 @@ class CapacityAgent:
         if re.search(
             r"(?:do not|don't|without|不要|不用|不使用|禁用).{0,30}(?:baseline|defaults|B200|基准|默认)",
             question,
-            re.I,
+            re.IGNORECASE,
         ):
             self.baseline_enabled = False
-        elif re.search(r"baseline|\bB200\b|基准|使用默认|采用默认", question, re.I):
+        elif re.search(
+            r"baseline|\bB200\b|基准|使用默认|采用默认", question, re.IGNORECASE
+        ):
             self.baseline_enabled = True
         start = len(self.history)
         self.history.append({"role": "user", "content": question})
@@ -264,10 +274,34 @@ class CapacityAgent:
                             valid = valid and not re.search(
                                 r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|hundred|thousand|million|billion)\b",
                                 final["english"],
-                                re.I,
+                                re.IGNORECASE,
                             )
                             valid = valid and (
-                                final["kind"] != "answer" or bool(records)
+                                final["kind"] != "answer"
+                                or any(
+                                    r["tool"]
+                                    in {
+                                        "calculate_capacity",
+                                        "compare_scenarios",
+                                        "run_pue_sensitivity",
+                                        "generate_capacity_plot",
+                                    }
+                                    for r in records
+                                )
+                            )
+                            valid = valid and (
+                                final["kind"] != "knowledge"
+                                or any(
+                                    r.get("hits")
+                                    for r in records
+                                    if r["tool"] == "search_knowledge"
+                                )
+                            )
+                            # Citation paths and URLs come only from the local retriever.
+                            valid = valid and not re.search(
+                                r"https?://|www\.|\[[^\]]+\]|\.md\b",
+                                prose,
+                                re.IGNORECASE,
                             )
                         if valid:
                             self.history.extend(
@@ -286,7 +320,7 @@ class CapacityAgent:
                     self.history.append(
                         {
                             "role": "developer",
-                            "content": "Return valid bilingual qualitative JSON. No digits or numeric words. For a calculation answer call its tool first; otherwise ask a clarification or report unsupported scope.",
+                            "content": "Return valid bilingual qualitative JSON. No digits, numeric words, citation markers, URLs or paths. For kind=answer call a calculation tool; for kind=knowledge retrieve matching sources this turn. With no evidence ask a clarification or report unsupported scope. The host displays source excerpts and citations.",
                         }
                     )
                     continue

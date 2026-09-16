@@ -1,4 +1,4 @@
-"""Strict API schemas adapted to the Phase 1A contracts. / 适配 Phase 1A 的严格 API 契约。"""
+"""Strict API schemas for engineering tools and local knowledge. / 工程工具及本地知识的严格 API 契约。"""
 
 from copy import deepcopy
 
@@ -40,6 +40,16 @@ def tool_definitions():
         }
     )
     specs = [
+        (
+            "search_knowledge",
+            "Retrieve sourced local explanations of PUE, server specs, rack/pod concepts, assumptions and scope. Not a calculator or live lookup. / 检索本地知识与来源，不计算部署结果或查询实时资料。",
+            object_schema(
+                {
+                    "query": {"type": "string", "minLength": 1, "maxLength": 500},
+                    "top_k": {"type": "integer", "minimum": 1, "maximum": 5},
+                }
+            ),
+        ),
         (
             "calculate_capacity",
             "Calculate one deployment. Use the documented baseline only in an explicitly established baseline context. / 计算单个部署，仅在明确的基准上下文中使用默认值。",
@@ -91,7 +101,10 @@ def tool_definitions():
 
 FINAL_SCHEMA = object_schema(
     {
-        "kind": {"type": "string", "enum": ["answer", "clarification", "unsupported"]},
+        "kind": {
+            "type": "string",
+            "enum": ["answer", "knowledge", "clarification", "unsupported"],
+        },
         "english": {"type": "string"},
         "chinese": {"type": "string"},
     }

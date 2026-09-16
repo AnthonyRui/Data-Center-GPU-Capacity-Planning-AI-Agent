@@ -26,6 +26,20 @@ def format_turn(turn):
     lines = ["English", turn.english, "", "中文", turn.chinese]
     for record in turn.records:
         lines += ["", f"Tool / 工具: {record['tool']}"]
+        if record["tool"] == "search_knowledge":
+            if not record["hits"]:
+                lines.append("No matching local source. / 未找到匹配的本地来源。")
+            for hit in record["hits"]:
+                lines += [
+                    f"  Source / 来源: {hit['id']} — {hit['title_en']} / {hit['title_zh']}",
+                    "  " + hit["text_en"],
+                    "  " + hit["text_zh"],
+                    f"  {hit['source_file']} — {hit['source_section']} ({hit['source_kind']})",
+                ]
+                if hit["source_url"]:
+                    lines.append("  " + hit["source_url"])
+            lines += ["  " + record["notice_en"], "  " + record["notice_zh"]]
+            continue
         if "result_id" in record:
             lines.append(f"Result / 结果编号: {record['result_id']}")
         if "result" in record:

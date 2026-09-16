@@ -250,7 +250,7 @@ class LLMClientTests(unittest.TestCase):
                     "max_price": {"prompt": 0, "completion": 0},
                 },
             )
-            self.assertEqual(len(data["tools"]), 4)
+            self.assertEqual(len(data["tools"]), 5)
             self.assertNotIn("text", data)
             self.assertIn("JSON object", data["instructions"])
             self.assertEqual(data["reasoning"], {"effort": "low"})

@@ -1,5 +1,9 @@
 # Capacity agent CLI / 容量规划 Agent 命令行
 
+Phase 2 adds local knowledge retrieval; see [knowledge guide](phase2_knowledge.md). Existing calculation commands are unchanged.
+
+Phase 2 增加本地知识检索，见[知识问答指南](phase2_knowledge.md)。原计算命令保持不变。
+
 Phase 1B adds natural-language interaction to the Phase 1A deterministic tools. The OpenAI/OpenRouter adapter selects tools through structured function calling. The Python model remains responsible for all capacity calculations; the CLI displays its numeric values, units and parameter provenance. Replies include English followed by Chinese.
 
 Phase 1B 在 Phase 1A 确定性工具上增加自然语言交互。OpenAI/OpenRouter 适配器通过结构化函数调用选择工具，Python 模型仍负责全部容量计算，CLI 展示其数值、单位和参数来源。回答先英文、后中文。
