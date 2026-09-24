@@ -1,8 +1,8 @@
-# GPU Rack and Pod Power Capacity Planning
+# Data Center GPU Capacity Planning AI Agent
 
-**A reproducible Python model for GPU deployment under a 500 MW facility power limit.**
+**An AI agent that extends the [Data Center GPU Rack & Pod Power Capacity Planning](https://github.com/AnthonyRui/Data-Center-GPU-Rack-Pod-Power-Capacity-Planning) model with a conversational command-line interface.**
 
-Convert server specifications and deployment assumptions into rack power, pod power, facility demand and whole-pod GPU capacity. Explore how PUE, rack density and pod size change the result.
+The agent calls deterministic Python tools to calculate GPU rack/pod power and capacity under facility power limits, compare deployment scenarios, analyze PUE sensitivity, and generate plots. It also retrieves explanations and source references from a curated local knowledge corpus. Engineering results come from the calculation tools; the language model coordinates tool calls and explains their outputs.
 
 **Agent extension status: Phase 2A + 2B.** The CLI combines four deterministic engineering tools with local, sourced knowledge retrieval. OpenRouter free models and OpenAI remain supported. Read the [Phase 2 guide](docs/phase2_knowledge.md) and [validation record](docs/phase2_validation.md). The [Phase 1B acceptance record](docs/phase1b_acceptance.md) preserves the earlier milestone.
 
