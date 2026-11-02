@@ -1,5 +1,19 @@
 # Data Center GPU Capacity Planning AI Agent
 
+## OpsAI integration status / OpsAI 接入进度
+
+This project also serves as the capacity-planning module for the planned OpsAI
+operations application. Local Python integration is available without an LLM or
+API key; the operational-data pipeline and Dashboard are not yet implemented.
+See the [integration guide](docs/opsai-integration.md),
+[application example](examples/opsai_capacity.py), and
+[development record](docs/development-progress.md).
+
+本项目保留独立 CLI，同时为计划中的 OpsAI 提供容量计算模块。已提供无需 AI Key
+的本地调用示例；运营数据分析和 Dashboard 尚未实现。现有模型与 baseline 保持不变。
+下方 Phase 路线图保留为容量模块的长期候选清单；近期优先接入准备、运营数据基础和
+最小演示流程，不代表全部 Phase 都属于年底交付范围。
+
 **An AI agent that extends the [Data Center GPU Rack & Pod Power Capacity Planning](https://github.com/AnthonyRui/Data-Center-GPU-Rack-Pod-Power-Capacity-Planning) model with a conversational command-line interface.**
 
 The agent calls deterministic Python tools to calculate GPU rack/pod power and capacity under facility power limits, compare deployment scenarios, analyze PUE sensitivity, and generate plots. It also retrieves explanations and source references from a curated local knowledge corpus. Engineering results come from the calculation tools; the language model coordinates tool calls and explains their outputs.
