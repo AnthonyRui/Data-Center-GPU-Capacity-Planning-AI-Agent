@@ -76,8 +76,8 @@
     "id": "reserve",
     "title_en": "Remaining power and utilization",
     "title_zh": "剩余功率与容量利用率",
-    "text_en": "Remaining capacity is unused facility power caused by fitting an integer number of complete pods. It is not an intentional safety or reliability reserve. High facility power utilization is a mathematical packing outcome, not a recommended operating target. Other IT services and reserve margins are not allocated in the current model.",
-    "text_zh": "剩余容量是完整 Pod 整数装填后未使用的设施功率，不是有意设置的安全或可靠性预留。高设施功率利用率是数学装填结果，不是推荐运行目标。当前模型未为其他 IT 业务或预留余量分配预算。",
+    "text_en": "Remaining capacity is unused facility power caused by fitting an integer number of complete pods. It is not an intentional safety or reliability reserve. High facility power utilization is a mathematical packing outcome, not a recommended operating target. The allocation comparison tool can separately budget explicit operating and growth reserves before packing whole pods or racks.",
+    "text_zh": "剩余容量是完整 Pod 整数装填后未使用的设施功率，不是有意设置的安全或可靠性预留。高设施功率利用率是数学装填结果，不是推荐运行目标。分配对比工具可以先单列运行和增长预留，再按完整 Pod 或整架分配。",
     "keywords": [
       "reserve",
       "remaining",

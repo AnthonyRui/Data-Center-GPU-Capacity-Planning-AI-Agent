@@ -10,6 +10,7 @@ from typing import Any
 
 import pandas as pd
 
+from src.allocation import allocation_plans
 from src.power_model import ModelInputs, evaluate
 from src.scenarios import load_scenarios
 from src.sensitivity import sweep
@@ -25,6 +26,7 @@ from .schemas import (
     ToolValidationError,
     label,
     number,
+    object_fields,
     parse_request,
     validate_parameters,
 )
@@ -361,9 +363,45 @@ def generate_capacity_plot(
     }
 
 
+def compare_allocations(request):
+    """Plan whole and partial pods with caller-selected reserve assumptions."""
+    options = ("operating_reserve_pct", "growth_reserve_pct", "reserve_basis")
+    args = object_fields(request, {"parameters", "use_baseline_defaults", *options})
+    inputs, provenance, defaults = _resolve(
+        CapacityRequest.from_dict({k: v for k, v in args.items() if k not in options})
+    )
+    policy = {k: args.get(k, None if k == "reserve_basis" else 0) for k in options}
+    try:
+        plans = allocation_plans(inputs, **policy)
+    except ValueError as exc:
+        raise ToolValidationError(str(exc)) from exc
+    return _finite_result(
+        {
+            "tool": "compare_allocations",
+            "inputs": asdict(inputs),
+            "provenance": provenance,
+            "assumptions_used": defaults,
+            "reserve_inputs": policy,
+            "reserve_sources": {
+                k: ("request" if k in args and args[k] is not None else "not specified")
+                for k in options
+            },
+            "allocation": plans,
+            "explanation": {
+                "en": "Reserves are explicit facility-power set-asides. The packing remainder is "
+                "unused deployable power. Partial pods add whole racks with the same power "
+                "and GPU assumptions; physical fit, shared pod overhead and redundancy are not verified.",
+                "zh": "预留在设施功率层扣除；装填剩余仅指可部署预算中的余量。部分 Pod 只按完整机架增加，"
+                "沿用每架功耗和 GPU 配置；不验证物理安装、Pod 共享开销或冗余。",
+            },
+        }
+    )
+
+
 REGISTERED_TOOLS = MappingProxyType(
     {
         "calculate_capacity": calculate_capacity,
+        "compare_allocations": compare_allocations,
         "compare_scenarios": compare_scenarios,
         "run_pue_sensitivity": run_pue_sensitivity,
         "generate_capacity_plot": generate_capacity_plot,

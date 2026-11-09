@@ -30,6 +30,6 @@ PUE is applied as a constant planning multiplier. A real facility's PUE varies w
 
 PUE在模型中作为固定规划乘数；真实设施PUE随负载及运行条件变化。
 
-The whole facility budget is allocated to the modeled GPU pods and their PUE overhead. Other IT services, reserve margins and partial pods require explicit extensions. Residual capacity is unused power under the packing constraint, not a deliberate engineering safety reserve.
+The original baseline allocates facility power to complete pods. The optional [allocation comparison](reserve-allocation.md) deducts explicit operating and growth reserves before packing whole pods or whole racks. Residual deployable power is not an operating reserve.
 
-整个设施预算分配给模型中的GPU Pod及其PUE开销。其他IT业务、预留余量及部分Pod部署需要明确扩展。剩余容量是整数装填约束导致的未使用功率，并非有意设置的工程安全预留。
+原基准按完整 Pod 分配设施功率。可选分配对比工具先扣除显式预留，再按整 Pod 或整架装填；装填后的剩余功率不是运行预留。

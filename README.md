@@ -18,15 +18,15 @@ See the [integration guide](docs/opsai-integration.md),
 
 The agent calls deterministic Python tools to calculate GPU rack/pod power and capacity under facility power limits, compare deployment scenarios, analyze PUE sensitivity, and generate plots. It also retrieves explanations and source references from a curated local knowledge corpus. Engineering results come from the calculation tools; the language model coordinates tool calls and explains their outputs.
 
-**Agent extension status: Phase 2A + 2B.** The CLI combines four deterministic engineering tools with local, sourced knowledge retrieval. OpenRouter free models and OpenAI remain supported. Read the [Phase 2 guide](docs/phase2_knowledge.md) and [validation record](docs/phase2_validation.md). The [Phase 1B acceptance record](docs/phase1b_acceptance.md) preserves the earlier milestone.
+**Phase 3 in progress:** [reserve-aware allocation comparison](docs/reserve-allocation.md) is available alongside the original capacity tools and [local knowledge retrieval](docs/phase2_knowledge.md).
 
-**Agent 扩展进度：Phase 2A + 2B。** CLI 已将四个确定性工程工具与带来源的本地知识检索结合，继续支持 OpenRouter 免费模型及 OpenAI。详见[Phase 2 使用指南](docs/phase2_knowledge.md)及[验证记录](docs/phase2_validation.md)。[Phase 1B 验收记录](docs/phase1b_acceptance.md)保留先前阶段证据。
+**Phase 3 进行中：** 新增[预留与整架分配对比](docs/reserve-allocation.md)，保留原有容量计算、绘图及本地知识检索。
 
 ## Development Roadmap / 开发路线图
 
-Current status: **Phase 2A + 2B complete**. Phase 1A (four validated engineering tools), Phase 1B (CLI agent, OpenRouter support and live acceptance), and Phase 2A/2B (local sourced knowledge retrieval and conversational integration) are complete. The next planned delivery is Phase 3, beginning with engineering constraints. The roadmap is intentionally staged so each phase is tested and reviewed before the next one starts.
+Phases 1 and 2 are complete. Phase 3 now supports explicit reserve budgets and whole-rack partial pods; the physical rack limit is next.
 
-当前状态：**Phase 2A + 2B 已完成**。Phase 1A（四个经过验证的工程工具）、Phase 1B（CLI Agent、OpenRouter 接入及真实验收）以及 Phase 2A/2B（带来源的本地知识检索和对话接入）均已完成。下一阶段计划从工程约束开始，进入 Phase 3。路线图按阶段推进，每个阶段先测试和验收，再进入下一阶段。
+Phase 1、2 已完成。Phase 3 已支持运行/增长预留与完整、部分 Pod 对比；下一项是物理机架约束。
 
 | Phase | Status / 状态 | Scope / 范围 |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ Current status: **Phase 2A + 2B complete**. Phase 1A (four validated engineering
 | Phase 1B | Complete / 已完成 | CLI conversation, OpenRouter free routing, plots and live acceptance / CLI 对话、OpenRouter 免费路由、绘图与真实验收 |
 | Phase 2A | Complete / 已完成 | Curated bilingual local knowledge corpus and lexical retrieval / 双语本地知识库与词项检索 |
 | Phase 2B | Complete / 已完成 | Knowledge tool calling, source panels and mixed calculation flows / 知识工具调用、来源面板与混合计算流程 |
-| Phase 3 | Planned / 计划中 | Engineering constraints and reserve-aware capacity planning / 工程约束与考虑预留的容量规划 |
+| Phase 3 | In progress / 进行中 | Engineering constraints and reserve-aware capacity planning / 工程约束与考虑预留的容量规划 |
 | Phase 4 | Planned / 计划中 | Streamlit Dashboard and 500 MW case study / Streamlit Dashboard 与 500 MW 案例 |
 | Phase 5 | Planned / 计划中 | Cooling, UPS, transformer and redundancy constraints / 冷却、UPS、变压器与冗余约束 |
 | Phase 6 | Planned / 计划中 | Workload forecasting and real-world PUE data / 工作负载预测与真实 PUE 数据 |
@@ -43,15 +43,15 @@ Current status: **Phase 2A + 2B complete**. Phase 1A (four validated engineering
 
 ### Phase 3 — Engineering constraints and capacity planning / 工程约束与容量规划
 
-- [ ] Operating Reserve and Growth Reserve calculations, input validation and boundary tests.
-- [ ] Partial Pod Allocation and Whole Pod versus Partial Pod comparison.
+- [x] Operating Reserve and Growth Reserve calculations, input validation and boundary tests.
+- [x] Partial Pod Allocation and Whole Pod versus Partial Pod comparison.
 - [ ] Physical Rack Constraint and joint Power Limit plus Rack Space Limit feasibility checks.
 - [ ] Unit tests for every new capacity constraint and clearer bottleneck explanations.
 - [ ] Reserve percentage versus GPU capacity, Whole Pod versus Partial Pod, and Rack Density versus Constraint charts.
 - [ ] GitHub Release **v0.2 — Engineering Constraints**.
 
-- [ ] Operating Reserve 与 Growth Reserve 计算、输入校验和边界测试。
-- [ ] Partial Pod Allocation，以及 Whole Pod 与 Partial Pod 方案对比。
+- [x] Operating Reserve 与 Growth Reserve 计算、输入校验和边界测试。
+- [x] Partial Pod Allocation，以及 Whole Pod 与 Partial Pod 方案对比。
 - [ ] Physical Rack Constraint，以及 Power Limit 与 Rack Space Limit 联合约束判断。
 - [ ] 为所有新增容量约束增加单元测试，并优化瓶颈原因解释。
 - [ ] 增加 Reserve% 与 GPU Capacity、Whole Pod 与 Partial Pod、Rack Density 与 Constraint 图表。
@@ -280,9 +280,9 @@ Tests cover the original baseline, exact decimal floor boundaries, insufficient 
 
 ## Limitations and future work
 
-The model assumes constant maximum server power, fixed per-rack network power, constant PUE and identical complete pods within a scenario. It does not reserve power for growth or failure conditions, allocate a separate general-purpose IT budget, or model partial pods. Capacity utilization is not GPU compute utilization.
+The original whole-pod baseline assumes constant maximum server power, fixed per-rack network power, constant PUE and identical complete pods within a scenario. The separate compare_allocations tool supports explicit reserves and partial pods; neither tool allocates a separate general-purpose IT budget. Capacity utilization is not GPU compute utilization.
 
-Detailed cooling/CFD, electrical distribution, breakers, cables, transformers, UPS topology, redundancy and time-varying workloads are outside scope. Future work may add explicit operating reserves, physical rack limits and partial-pod allocation, followed by real operational power/PUE data. Machine learning is deferred until suitable data and a defined validation task are available.
+Detailed cooling/CFD, electrical distribution, breakers, cables, transformers, UPS topology, redundancy and time-varying workloads are outside scope. Future work may add physical rack limits, followed by real operational power/PUE data. Machine learning is deferred until suitable data and a defined validation task are available.
 
 ## AI-Powered Capacity Planning Agent / AI 驱动的数据中心容量规划 Agent
 

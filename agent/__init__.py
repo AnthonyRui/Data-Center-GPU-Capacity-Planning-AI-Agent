@@ -2,6 +2,7 @@
 
 from .tools import (
     calculate_capacity,
+    compare_allocations,
     compare_scenarios,
     dispatch_tool,
     generate_capacity_plot,
@@ -10,6 +11,7 @@ from .tools import (
 
 __all__ = [
     "calculate_capacity",
+    "compare_allocations",
     "compare_scenarios",
     "dispatch_tool",
     "generate_capacity_plot",

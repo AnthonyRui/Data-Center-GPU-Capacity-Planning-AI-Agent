@@ -178,6 +178,8 @@ class CapacityAgent:
                     for key, value in args["parameters"].items()
                     if value is not None
                 }
+            if name == "compare_allocations":
+                args = {k: v for k, v in args.items() if v is not None}
             response = dispatch_tool(name, args)
             if response["ok"]:
                 self._counter += 1
@@ -282,6 +284,7 @@ class CapacityAgent:
                                     r["tool"]
                                     in {
                                         "calculate_capacity",
+                                        "compare_allocations",
                                         "compare_scenarios",
                                         "run_pue_sensitivity",
                                         "generate_capacity_plot",

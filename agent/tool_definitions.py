@@ -41,6 +41,32 @@ def tool_definitions():
     )
     specs = [
         (
+            "compare_allocations",
+            (
+                "Compare whole pods and whole-rack partial pods under optional reserves. "
+                "If both percentages are positive, ask which growth base to use; never guess."
+            ),
+            object_schema(
+                {
+                    **deepcopy(capacity),
+                    "operating_reserve_pct": {
+                        "type": ["number", "null"],
+                        "minimum": 0,
+                        "maximum": 100,
+                    },
+                    "growth_reserve_pct": {
+                        "type": ["number", "null"],
+                        "minimum": 0,
+                        "maximum": 100,
+                    },
+                    "reserve_basis": {
+                        "type": ["string", "null"],
+                        "enum": ["facility", "after_operating", None],
+                    },
+                }
+            ),
+        ),
+        (
             "search_knowledge",
             "Retrieve sourced local explanations of PUE, server specs, rack/pod concepts, assumptions and scope. Not a calculator or live lookup. / 检索本地知识与来源，不计算部署结果或查询实时资料。",
             object_schema(

@@ -1,5 +1,9 @@
 # Development record / 开发记录
 
+## 2026-11-09 — Reserve and partial-pod allocation
+
+Added the optional `compare_allocations` tool. Both reserve conventions are supported explicitly; original whole-pod behavior is unchanged. Partial allocation uses complete racks only. The 102-test local suite passed, including reserve validation, budget conservation, exact rack boundaries, baseline regression and agent integration. See [usage and assumptions](reserve-allocation.md). Physical rack-space constraints and new plots remain planned.
+
 ## 2026-11-02 — Capacity-module integration preparation
 
 Implemented local application example `examples/opsai_capacity.py` using the

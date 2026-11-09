@@ -42,6 +42,26 @@ def format_turn(turn):
             continue
         if "result_id" in record:
             lines.append(f"Result / 结果编号: {record['result_id']}")
+        if "allocation" in record:
+            a = record["allocation"]
+            policy = record["reserve_inputs"]
+            lines.append(
+                f"  Operating / 运行预留: {policy['operating_reserve_pct']}% = {a['operating_reserve_mw']} MW; "
+                f"Growth / 增长预留: {policy['growth_reserve_pct']}% = {a['growth_reserve_mw']} MW"
+            )
+            lines.append(
+                f"  Growth basis / 增长预留基数: {policy['reserve_basis'] or 'not specified / 未指定'}; "
+                f"Deployable / 可部署: {a['deployable_facility_mw']} MW"
+            )
+            lines.append(
+                "  Plan / 方案 | Whole pods / 完整Pod | Partial racks / 尾Pod机架 | Racks | GPUs | Used MW | Packing remainder MW"
+            )
+            for key in ("whole_pod", "partial_pod"):
+                p = a[key]
+                lines.append(
+                    f"  {key} | {p['whole_pods']} | {p['racks_in_partial_pod']} | {p['total_racks']} | "
+                    f"{p['total_gpus']} | {p['used_facility_mw']} | {p['packing_remainder_mw']}"
+                )
         if "result" in record:
             for key, (english, chinese) in LABELS.items():
                 lines.append(
@@ -82,7 +102,12 @@ def format_turn(turn):
                 ),
                 None,
             )
-            values = row or record.get("result") or record.get("rows", [{}])[0]
+            values = (
+                row
+                or record.get("inputs")
+                or record.get("result")
+                or record.get("rows", [{}])[0]
+            )
             lines.append(f"  Inputs and sources / 输入与来源 {group}:")
             for field, source in sources.items():
                 value = values.get(field, "")
