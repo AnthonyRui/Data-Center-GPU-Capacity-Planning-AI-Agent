@@ -93,6 +93,7 @@ class AllocationTests(unittest.TestCase):
                 "operating_reserve_pct": 10,
                 "growth_reserve_pct": None,
                 "reserve_basis": None,
+                "rack_limit": None,
             }
             self.assertFalse(
                 agent._invoke("compare_allocations", json.dumps(args))["ok"]

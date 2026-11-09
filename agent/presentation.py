@@ -45,6 +45,20 @@ def format_turn(turn):
         if "allocation" in record:
             a = record["allocation"]
             policy = record["reserve_inputs"]
+            reason = {
+                "power": "功率受限",
+                "rack_space": "机架位置受限",
+                "both": "两项上限相同",
+            }[a["limiting_constraint"]]
+            lines.append(
+                f"  Rack capacity / 可用架数: power={a['power_limit_racks']}, "
+                f"space={a['rack_limit'] if a['rack_limit'] is not None else 'unspecified'}, "
+                f"feasible={a['feasible_racks']} ({a['limiting_constraint']} / {reason})"
+            )
+            lines.append(
+                f"  Power unavailable due to rack space / 因机架空间闲置的功率: "
+                f"{a['partial_pod']['space_limited_unused_mw']} MW"
+            )
             lines.append(
                 f"  Operating / 运行预留: {policy['operating_reserve_pct']}% = {a['operating_reserve_mw']} MW; "
                 f"Growth / 增长预留: {policy['growth_reserve_pct']}% = {a['growth_reserve_mw']} MW"

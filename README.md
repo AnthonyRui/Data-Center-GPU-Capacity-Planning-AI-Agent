@@ -24,9 +24,9 @@ The agent calls deterministic Python tools to calculate GPU rack/pod power and c
 
 ## Development Roadmap / 开发路线图
 
-Phases 1 and 2 are complete. Phase 3 now supports explicit reserve budgets and whole-rack partial pods; the physical rack limit is next.
+Phases 1 and 2 are complete. Phase 3 now supports explicit reserve budgets and whole-rack partial pods; optional rack-position limits and three [planning charts](docs/reserve-allocation.md) are available.
 
-Phase 1、2 已完成。Phase 3 已支持运行/增长预留与完整、部分 Pod 对比；下一项是物理机架约束。
+Phase 1、2 已完成。Phase 3 已支持运行/增长预留与完整、部分 Pod 对比；现可联合判断功率和机架位置瓶颈，生成[三类规划图表](docs/reserve-allocation.md)。
 
 | Phase | Status / 状态 | Scope / 范围 |
 | --- | --- | --- |
@@ -45,16 +45,16 @@ Phase 1、2 已完成。Phase 3 已支持运行/增长预留与完整、部分 P
 
 - [x] Operating Reserve and Growth Reserve calculations, input validation and boundary tests.
 - [x] Partial Pod Allocation and Whole Pod versus Partial Pod comparison.
-- [ ] Physical Rack Constraint and joint Power Limit plus Rack Space Limit feasibility checks.
-- [ ] Unit tests for every new capacity constraint and clearer bottleneck explanations.
-- [ ] Reserve percentage versus GPU capacity, Whole Pod versus Partial Pod, and Rack Density versus Constraint charts.
+- [x] Physical Rack Constraint and joint Power Limit plus Rack Space Limit feasibility checks.
+- [x] Unit tests for every new capacity constraint and clearer bottleneck explanations.
+- [x] Reserve percentage versus GPU capacity, Whole Pod versus Partial Pod, and Rack Density versus Constraint charts.
 - [ ] GitHub Release **v0.2 — Engineering Constraints**.
 
 - [x] Operating Reserve 与 Growth Reserve 计算、输入校验和边界测试。
 - [x] Partial Pod Allocation，以及 Whole Pod 与 Partial Pod 方案对比。
-- [ ] Physical Rack Constraint，以及 Power Limit 与 Rack Space Limit 联合约束判断。
-- [ ] 为所有新增容量约束增加单元测试，并优化瓶颈原因解释。
-- [ ] 增加 Reserve% 与 GPU Capacity、Whole Pod 与 Partial Pod、Rack Density 与 Constraint 图表。
+- [x] Physical Rack Constraint，以及 Power Limit 与 Rack Space Limit 联合约束判断。
+- [x] 为所有新增容量约束增加单元测试，并优化瓶颈原因解释。
+- [x] 增加 Reserve% 与 GPU Capacity、Whole Pod 与 Partial Pod、Rack Density 与 Constraint 图表。
 - [ ] 发布 GitHub Release **v0.2 — Engineering Constraints**。
 
 ### Phase 4 — Dashboard and case study / Dashboard 与案例研究
@@ -282,7 +282,7 @@ Tests cover the original baseline, exact decimal floor boundaries, insufficient 
 
 The original whole-pod baseline assumes constant maximum server power, fixed per-rack network power, constant PUE and identical complete pods within a scenario. The separate compare_allocations tool supports explicit reserves and partial pods; neither tool allocates a separate general-purpose IT budget. Capacity utilization is not GPU compute utilization.
 
-Detailed cooling/CFD, electrical distribution, breakers, cables, transformers, UPS topology, redundancy and time-varying workloads are outside scope. Future work may add physical rack limits, followed by real operational power/PUE data. Machine learning is deferred until suitable data and a defined validation task are available.
+Detailed cooling/CFD, electrical distribution, breakers, cables, transformers, UPS topology, redundancy and time-varying workloads are outside scope. Future work may add rack-level dimensional fit checks, followed by real operational power/PUE data. Machine learning is deferred until suitable data and a defined validation task are available.
 
 ## AI-Powered Capacity Planning Agent / AI 驱动的数据中心容量规划 Agent
 

@@ -49,6 +49,11 @@ def tool_definitions():
             object_schema(
                 {
                     **deepcopy(capacity),
+                    "rack_limit": {
+                        "type": ["integer", "null"],
+                        "minimum": 0,
+                        "description": "Available rack positions; null when unspecified.",
+                    },
                     "operating_reserve_pct": {
                         "type": ["number", "null"],
                         "minimum": 0,
@@ -107,7 +112,14 @@ def tool_definitions():
                     "result_id": {"type": "string"},
                     "analysis_type": {
                         "type": "string",
-                        "enum": ["capacity", "comparison", "pue_sensitivity"],
+                        "enum": [
+                            "capacity",
+                            "comparison",
+                            "pue_sensitivity",
+                            "reserve_gpu",
+                            "whole_partial",
+                            "rack_density",
+                        ],
                     },
                 }
             ),

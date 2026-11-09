@@ -91,6 +91,25 @@ class CapacityAgent:
                 return {"ok": True, "data": data}
             if name == "generate_capacity_plot":
                 stored = self.results.get(args["result_id"])
+                if args["analysis_type"] in (
+                    "reserve_gpu",
+                    "whole_partial",
+                    "rack_density",
+                ):
+                    if not stored or stored["tool"] != "compare_allocations":
+                        return _error(
+                            "invalid_result",
+                            "Use a compare_allocations result / 请先进行分配对比",
+                        )
+                    from .allocation_charts import generate_allocation_chart
+
+                    data = generate_allocation_chart(
+                        stored,
+                        args["analysis_type"],
+                        self.output_root / self.session_id,
+                    )
+                    data["source_result_id"] = args["result_id"]
+                    return {"ok": True, "data": data}
                 kinds = {
                     "calculate_capacity": "capacity",
                     "compare_scenarios": "comparison",

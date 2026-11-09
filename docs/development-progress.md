@@ -1,5 +1,9 @@
 # Development record / 开发记录
 
+## 2026-11-09 — Rack limits and planning charts
+
+Added a joint power and rack-position constraint and three reproducible planning charts. The 105-test local suite passed. See [results and examples](reserve-allocation.md).
+
 ## 2026-11-09 — Reserve and partial-pod allocation
 
 Added the optional `compare_allocations` tool. Both reserve conventions are supported explicitly; original whole-pod behavior is unchanged. Partial allocation uses complete racks only. The 102-test local suite passed, including reserve validation, budget conservation, exact rack boundaries, baseline regression and agent integration. See [usage and assumptions](reserve-allocation.md). Physical rack-space constraints and new plots remain planned.

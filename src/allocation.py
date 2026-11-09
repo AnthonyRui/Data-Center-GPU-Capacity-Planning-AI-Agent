@@ -11,7 +11,11 @@ def _percent(value, name):
 
 
 def allocation_plans(
-    inputs, operating_reserve_pct=0, growth_reserve_pct=0, reserve_basis=None
+    inputs,
+    operating_reserve_pct=0,
+    growth_reserve_pct=0,
+    reserve_basis=None,
+    rack_limit=None,
 ):
     """Compare both policies under one explicit budget; a partial pod contains whole racks."""
     op = _percent(operating_reserve_pct, "operating_reserve_pct")
@@ -38,7 +42,18 @@ def allocation_plans(
         * Fraction(str(inputs.pue))
         / 1000
     )
-    max_racks = budget // rack_mw
+    if rack_limit is not None and (type(rack_limit) is not int or rack_limit < 0):
+        raise ValueError("rack_limit must be a nonnegative integer or null")
+    power_racks = budget // rack_mw
+    max_racks = power_racks if rack_limit is None else min(power_racks, rack_limit)
+    limit = (
+        "power"
+        if rack_limit is None or power_racks < rack_limit
+        else "rack_space"
+        if rack_limit < power_racks
+        else "both"
+    )
+    space_mw = (power_racks - max_racks) * rack_mw
 
     def plan(racks):
         pods, extra = divmod(racks, inputs.racks_per_pod)
@@ -49,10 +64,16 @@ def allocation_plans(
             "total_racks": racks,
             "total_gpus": racks * inputs.servers_per_rack * inputs.gpus_per_server,
             "used_facility_mw": float(used),
-            "packing_remainder_mw": float(budget - used),
+            "packing_remainder_mw": float(budget - used - space_mw),
+            "space_limited_unused_mw": float(space_mw),
+            "remaining_deployable_mw": float(budget - used),
         }
 
     return {
+        "power_limit_racks": power_racks,
+        "rack_limit": rack_limit,
+        "feasible_racks": max_racks,
+        "limiting_constraint": limit,
         "operating_reserve_mw": float(operating_mw),
         "growth_reserve_mw": float(growth_mw),
         "deployable_facility_mw": float(budget),

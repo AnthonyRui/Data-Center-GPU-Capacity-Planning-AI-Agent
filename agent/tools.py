@@ -366,13 +366,17 @@ def generate_capacity_plot(
 def compare_allocations(request):
     """Plan whole and partial pods with caller-selected reserve assumptions."""
     options = ("operating_reserve_pct", "growth_reserve_pct", "reserve_basis")
-    args = object_fields(request, {"parameters", "use_baseline_defaults", *options})
+    args = object_fields(
+        request, {"parameters", "use_baseline_defaults", "rack_limit", *options}
+    )
     inputs, provenance, defaults = _resolve(
-        CapacityRequest.from_dict({k: v for k, v in args.items() if k not in options})
+        CapacityRequest.from_dict(
+            {k: v for k, v in args.items() if k not in (*options, "rack_limit")}
+        )
     )
     policy = {k: args.get(k, None if k == "reserve_basis" else 0) for k in options}
     try:
-        plans = allocation_plans(inputs, **policy)
+        plans = allocation_plans(inputs, rack_limit=args.get("rack_limit"), **policy)
     except ValueError as exc:
         raise ToolValidationError(str(exc)) from exc
     return _finite_result(
@@ -382,16 +386,19 @@ def compare_allocations(request):
             "provenance": provenance,
             "assumptions_used": defaults,
             "reserve_inputs": policy,
+            "rack_limit_source": "request"
+            if args.get("rack_limit") is not None
+            else "not specified",
             "reserve_sources": {
                 k: ("request" if k in args and args[k] is not None else "not specified")
                 for k in options
             },
             "allocation": plans,
             "explanation": {
-                "en": "Reserves are explicit facility-power set-asides. The packing remainder is "
-                "unused deployable power. Partial pods add whole racks with the same power "
+                "en": "Feasible rack count is the smaller of power-limited racks and available rack positions. "
+                "Power stranded by space is reported separately from packing remainder and reserves. Partial pods add whole racks with the same power "
                 "and GPU assumptions; physical fit, shared pod overhead and redundancy are not verified.",
-                "zh": "预留在设施功率层扣除；装填剩余仅指可部署预算中的余量。部分 Pod 只按完整机架增加，"
+                "zh": "可部署架数取功率上限与可用机架位置数中较小的一项；空间闲置功率、整数装填剩余和主动预留分别列示。部分 Pod 只按完整机架增加，"
                 "沿用每架功耗和 GPU 配置；不验证物理安装、Pod 共享开销或冗余。",
             },
         }
